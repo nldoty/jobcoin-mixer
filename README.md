@@ -1,6 +1,17 @@
 # jobcoin-mixer
 An application for mixing Jobcoin transactions
 
+## Instructions
+Currently, the `docker-compose` process is not working, as the containers are not properly talking to each other (CORS issues). 
+
+#### Prerequesites
+You will need both `docker` and `docker-compose` installed on your machine.
+
+Within the repository folder (`/jobcoin-mixer`), run:      
+`docker-compose up`
+
+Depending on your OS, you may need to use `sudo` with the `docker-compose` command. If you don't want to see output, add the `-d` flag. 
+
 ## Components
 
 ### Web App
