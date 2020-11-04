@@ -13,10 +13,11 @@ def json_print(obj):
 
 
 def check_balance(address):
+    # Gets the balance for a single address.
     address_info = get_single_address(address)
     balance = address_info.balance
 
-    return int(balance)
+    return str(balance)
 
 
 def get_all_transactions():
@@ -37,6 +38,7 @@ def get_all_transactions():
 
 
 def get_single_address(address):
+    # API call to get all info from a single address
     jobcoin_api_url = config.API_ADDRESS_URL + '/' + address
     response = requests.get(jobcoin_api_url)
 
@@ -64,6 +66,7 @@ def get_single_address(address):
 
 
 def transfer_coins(from_address, to_address, amount, time_delay=0):
+    # Used to transfer coins between two addresses
     time.sleep(time_delay)
     jobcoin_api_url = config.API_TRANSACTIONS_URL
     body = {

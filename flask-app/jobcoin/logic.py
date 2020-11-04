@@ -16,6 +16,7 @@ def mix_coins(address_list, mixer_address, transactions=None, fee=False):
     if not amount_coins_added:
         return False
 
+    # Transfers coins from the unique address to the mixer, then
     api.transfer_coins(mixer_address, config.MIXER_POOL_ADDRESS, amount_coins_added)
     num_addresses = len(address_list)
     num_transactions = randint(num_addresses, 4 * num_addresses) if not transactions else int(transactions)
@@ -24,13 +25,16 @@ def mix_coins(address_list, mixer_address, transactions=None, fee=False):
     coin_amounts_list = randomize_coins(num_transactions, amount_coins_added, fee)
     addresses_list = randomize_addresses(num_transactions, address_list)
 
+    # Checks that the number of coin dividends is the same as the number of addresses to send to.
     assert len(coin_amounts_list) == len(address_list)
 
+    # Creates the list of transactions
     transactions_list = []
     for i in range(num_transactions):
         transaction = Transaction(coin_amounts_list[i], None, addresses_list[i], config.MIXER_POOL_ADDRESS)
         transactions_list.append(transaction)
 
+    # Adds the fee to the transaction
     if fee:
         fee_amt = calculate_fee(amount_coins_added)
         fee_amt = shift_coin_values(fee_amt)
@@ -41,6 +45,7 @@ def mix_coins(address_list, mixer_address, transactions=None, fee=False):
 
 
 def make_transactions(transactions_list):
+    # Completes the transaction from one address to another
     for transaction in transactions_list:
         amount = transaction.amount
         to_address = transaction.to_address
@@ -49,6 +54,7 @@ def make_transactions(transactions_list):
 
 
 def convert_transactions_list_to_json(transactions_list):
+    # Creates JSON to send back to the web app, to display transactions.
     json_list = []
 
     for item in transactions_list:
@@ -63,18 +69,19 @@ def convert_transactions_list_to_json(transactions_list):
 
 
 def randomize_addresses(num_addresses, addresses):
+    # Takes a list of addresses and randomiz
     new_address_list = addresses
 
     for i in range(len(addresses), num_addresses):
         tmp_address = choice(addresses)
         new_address_list.append(tmp_address)
 
-    print("Sorting addresses. Length of addresses: " + str(len(new_address_list)))
     new_address_list = shuffle(new_address_list)
     return new_address_list
 
 
 def randomize_coins(num_buckets, balance, fee):
+    # Creates random amounts of coins to send to the addresses.
     bucket_dist = []
     buckets = []
     sum = 0
@@ -82,17 +89,17 @@ def randomize_coins(num_buckets, balance, fee):
         # This is here because doing floating point math on financial transactions can cause precision issues.
         # Instead, I round to a fixed amount, then multiply by the fixed amount to achieve an integer.
         # Later, once the math is done, I convert to a str and add a decimal place in, so no rounding errors take place.
-        tmp = round(uniform(0, int(balance)), ROUND_FACTOR)
+        tmp = round(uniform(0, float(balance)), ROUND_FACTOR)
 
         tmp *= (10 ** ROUND_FACTOR)
         bucket_dist.append(int(tmp))
 
     if fee:
         fee_amt = calculate_fee(balance)
-        top_bucket = (int(balance) * (10 ** ROUND_FACTOR)) - fee_amt
+        top_bucket = int(float(balance) * (10 ** ROUND_FACTOR)) - fee_amt
         bucket_dist.append(top_bucket)
     else:
-        bucket_dist.append(int(balance) * (10 ** ROUND_FACTOR))
+        bucket_dist.append(int(float(balance) * (10 ** ROUND_FACTOR)))
 
     bucket_dist.append(int(0))
     bucket_dist.sort()
@@ -102,8 +109,6 @@ def randomize_coins(num_buckets, balance, fee):
         sum += tmp
         tmp = shift_coin_values(tmp)
         buckets.append(tmp)
-
-    print("TOTAL: " + str(sum/(10**ROUND_FACTOR)))
 
     return buckets
 
@@ -120,7 +125,6 @@ def shift_coin_values(value):
 
 
 def shuffle(items):
-    print("items: " + ' '.join(map(str, items)))
     # Fisher-Yates shuffle
     n = len(items)
     for i in range(n-1, 0, -1):
@@ -131,7 +135,7 @@ def shuffle(items):
 
 def calculate_fee(balance):
     # Used for calculating a mixer fee. I don't really plan on using this.
-    balance = round(balance, ROUND_FACTOR)
+    balance = int(round(float(balance), ROUND_FACTOR))
     balance *= (10 ** ROUND_FACTOR)
 
     fee = math.floor(balance * FEE_PCT)

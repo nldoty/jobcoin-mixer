@@ -6,9 +6,10 @@ app = Flask(__name__)
 CORS(app, support_credentials=True)
 
 
-@app.route('/mix_coins', methods=['POST'])
+@app.route('/api/get_address', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def get_mixer_address():
+    # Allows the user
     body = request.get_json()
     addresses = body['addresses']
 
@@ -24,11 +25,11 @@ def get_mixer_address():
         return 400
 
 
-@app.route('/check_deposit/<uuid>', methods=['GET', 'POST'])
+@app.route('/api/mix_coins/<uuid>', methods=['GET', 'POST'])
 @cross_origin(supports_credentials=True)
 def check_mixer_address(uuid):
     if request.method == 'GET':
-        balance = int(api.check_balance(uuid))
+        balance = str(api.check_balance(uuid))
         # Let the front end know
         return jsonify({
             'balance': balance
