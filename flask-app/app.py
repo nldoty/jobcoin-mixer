@@ -1,9 +1,8 @@
-from flask import Flask, request, jsonify, Blueprint
+from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
-from jobcoin import api, jobcoin
+from jobcoin import api, logic
 import uuid
 app = Flask(__name__)
-api = Blueprint('api', __name__)
 CORS(app, support_credentials=True)
 
 
@@ -43,14 +42,12 @@ def check_mixer_address(uuid):
         transactions = body['transactions'] if body['transactions'] else None
         timeout = body['timeout'] if body['timeout'] else None
 
-        transactions_list = jobcoin.mix_coins(addresses, uuid, transactions)
-        body = jobcoin.convert_transactions_list_to_json(transactions_list)
-        jobcoin.make_transactions(transactions_list)
+        transactions_list = logic.mix_coins(addresses, uuid, transactions, False)
+        body = logic.convert_transactions_list_to_json(transactions_list)
+        logic.make_transactions(transactions_list)
 
         return jsonify(body), 200
 
-
-app.register_blueprint(api, url_prefix='/api')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
