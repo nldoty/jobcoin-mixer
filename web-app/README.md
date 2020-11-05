@@ -46,7 +46,7 @@ The app will then be available at [http://localhost:3000/](http://localhost:3000
 
 #### Using Docker
 To start the app using docker, you must build and then run the container. 
-`docker build -t web-app .`
+`docker build -t web-app .`      
 `docker run --name mixer-webapp -p 80:3000 web-app`
 
 The app will then be available at [http://localhost:80/](http://localhost:80/).
