@@ -10,7 +10,7 @@ class RequestSuccess extends React.Component {
             <div className="mixer_request" style={{width: '600px'}} >
                 <Jumbotron>
                     <h1>Success!</h1>
-                    <h4>You should see the following transactions in the next few minutes.</h4>
+                    <h4>You should see the following transactions:</h4>
                     {this.props.location.transactions.map((transaction) => (
                         <p>{transaction}</p>
                     ))}
