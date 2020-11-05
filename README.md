@@ -19,7 +19,7 @@ Depending on your OS, you may need to use `sudo` with the `docker-compose` comma
 The web app is a simple create-react-app that has been modified to facilitate the transfer of Jobcoins.
 Users put in the following information into the app:     
 **1:** A list of addresses     
-**2:** A number of transactions (OPTIONAL)
+**2:** A number of transactions (OPTIONAL)        
 **3:** A timeout for the transactions (OPTIONAL)
 
 The web app then makes a call to the flask app, which provides the web app with a random, unique UUID to deposit coins to.
@@ -43,7 +43,8 @@ The `GET` allows the user to tell the API that coins have been deposited at the 
 The `POST` allows the user to then send the address list, the number of transactions, and the timeout length to the flask app for mixing the coins.
 
 ## Considerations
-Some of the aspects of my mixer were meant to be demonstrational, but don't necessarily make a difference in the way my mixer works.
+Some of the aspects of my mixer were meant to be demonstrational, but don't necessarily make a difference in the way my mixer works.        
+
 **1:** The mixer takes coins out of the unique address and places them in a pool, and then coins are distributed from the pool. If 'coins' themselves were unique/trackable, this would be helpful - but in the context of my mixer, it really makes little difference.          
 **2:** The ability to add delay to your transactions is meant to spread them across the network to add anonymity. However, since there aren't that many transactions happening on the network at once, it really makes no difference in the end in this example.         
 **3:** Because I didn't implement some type of queue/threading for my app, delaying the transactions means waiting until the API calls are finished. Because of this, I made them intentionally very, very short, so as not to delay the app for minutes on end.
