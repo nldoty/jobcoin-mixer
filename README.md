@@ -8,10 +8,14 @@ The containers can be run separately or they can be run as a group, using `Docke
 #### Prerequesites
 You will need both `docker` and `docker-compose` installed on your machine.
 
+#### Commands
+
 Within the repository folder (`/jobcoin-mixer`), run:      
 `docker-compose up`
 
 Depending on your OS, you may need to use `sudo` with the `docker-compose` command. If you don't want to see output, add the `-d` flag. 
+
+The app will then be available at [http://localhost:80/](http://localhost:80/).
 
 ## Components
 
