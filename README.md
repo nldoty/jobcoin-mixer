@@ -52,3 +52,5 @@ Some of the aspects of my mixer were meant to be demonstrational, but don't nece
 
 ## Other
 If you'd like to view more detailed information about the separate projects, please view their READMEs. 
+
+A note: If you're poking around through the git history and you notice there seems to be some gaps, I originally started this project as two separate repositories and then combined them. You can see the [flask-app](https://github.com/nldoty/gemini-coinmixer-challenge) and [web-app](https://github.com/nldoty/gemini-mixer-react-app) here if you'd like a better picture. Please forgive my poor naming structures. 
