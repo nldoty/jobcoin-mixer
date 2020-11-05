@@ -135,9 +135,9 @@ def shuffle(items):
 
 def calculate_fee(balance):
     # Used for calculating a mixer fee. I don't really plan on using this.
-    balance = int(round(float(balance), ROUND_FACTOR))
+    balance = round(float(balance), ROUND_FACTOR)
     balance *= (10 ** ROUND_FACTOR)
 
-    fee = math.floor(balance * FEE_PCT)
+    fee = math.floor(int(balance) * FEE_PCT)
 
     return fee

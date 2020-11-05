@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 services:
   web-app:
     container_name: web-app
@@ -7,7 +7,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - 80:3000
-      - 443:3000
     volumes:
       - ./web-app:/usr/src/app
       - /usr/src/app/node_modules
@@ -15,9 +14,11 @@ services:
   flask-app:
     restart: always
     container_name: flask-app
-    build: ./flask-app
-    expose:
-      - 5000
+    build:
+      context: ./flask-app
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
     environment:
       - FLASK_ENV=production
       - FLASK_APP=app.py
