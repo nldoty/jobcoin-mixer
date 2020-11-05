@@ -82,3 +82,16 @@ def transfer_coins(from_address, to_address, amount, time_delay=0):
     else:
         # TODO: This designates failure. But what if the API is down? What if its insufficient funds? Needs updating.
         return False
+
+
+def create_coins(to_address, amount):
+    # Used only to create coins for testing purposes.
+    jobcoin_api_url = config.API_TRANSACTIONS_URL
+    body = {
+        'toAddress': to_address,
+        'amount': amount
+    }
+
+    response = requests.post(jobcoin_api_url, body)
+
+    return True if response.status_code == 200 else False

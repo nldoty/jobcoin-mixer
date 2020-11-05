@@ -29,7 +29,7 @@ def mix_coins(address_list, mixer_address, timeout=None, transactions=None, fee=
     timeouts = randomize_timeouts(num_transactions, timeout)
 
     # Checks that the number of coin dividends is the same as the number of addresses to send to.
-    assert len(coin_amounts_list) == len(address_list)
+    assert len(coin_amounts_list) == len(addresses_list)
 
     # Creates the list of transactions
     transactions_list = []
@@ -74,7 +74,8 @@ def convert_transactions_list_to_json(transactions_list):
 
 def randomize_addresses(num_transactions, addresses):
     # Takes a list of addresses and randomizes them
-    new_address_list = addresses
+    # This was a fun bug to discover.
+    new_address_list = addresses[:]
 
     for i in range(len(addresses), num_transactions):
         tmp_address = choice(addresses)
