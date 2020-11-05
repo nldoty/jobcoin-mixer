@@ -9,14 +9,14 @@ class MixCoins extends React.Component {
         const mixer_address = this.props.location.address;
 
         const response = await checkMixerDepositAddress(mixer_address);
-        console.log(response);
 
-        const balance = response['balance'];
+        const balance = parseInt(response['balance']);
 
         if (balance === 0) {
             const str = "No coins at address " + mixer_address + " found.\n Are you sure you sent coins to the address?";
             window.alert(str)
         } else {
+            this.props.history.push({pathname: '/loading'})
             const formValues = this.props.location.formValues;
 
             const addressListAll = [
@@ -36,6 +36,7 @@ class MixCoins extends React.Component {
                 'transactions': formValues.transactions,
                 'timeout': formValues.timeout
             }
+
 
             const mix_response = await mixCoinsFromAddress(mixer_address, body);
             const mixer_transactions = mix_response['transactions'];

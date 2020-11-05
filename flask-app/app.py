@@ -30,6 +30,7 @@ def get_mixer_address():
 def check_mixer_address(uuid):
     if request.method == 'GET':
         balance = str(api.check_balance(uuid))
+        print("BALANCE: " + str(balance))
         # Let the front end know
         return jsonify({
             'balance': balance
@@ -43,8 +44,9 @@ def check_mixer_address(uuid):
         transactions = body['transactions'] if body['transactions'] else None
         timeout = body['timeout'] if body['timeout'] else None
 
-        transactions_list = logic.mix_coins(addresses, uuid, transactions, False)
+        transactions_list = logic.mix_coins(addresses, uuid, timeout, transactions, False)
         body = logic.convert_transactions_list_to_json(transactions_list)
+
         logic.make_transactions(transactions_list)
 
         return jsonify(body), 200

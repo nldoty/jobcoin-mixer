@@ -8,7 +8,7 @@ ROUND_FACTOR = 8
 FEE_PCT = .001
 
 
-def mix_coins(address_list, mixer_address, transactions=None, fee=False):
+def mix_coins(address_list, mixer_address, timeout=None, transactions=None, fee=False):
     # Main function for mixing a users coins.
 
     # Checks if coins have been added to the mixer's unique address.
@@ -25,20 +25,23 @@ def mix_coins(address_list, mixer_address, transactions=None, fee=False):
     coin_amounts_list = randomize_coins(num_transactions, amount_coins_added, fee)
     addresses_list = randomize_addresses(num_transactions, address_list)
 
+    # Creates a random list of timeouts
+    timeouts = randomize_timeouts(num_transactions, timeout)
+
     # Checks that the number of coin dividends is the same as the number of addresses to send to.
     assert len(coin_amounts_list) == len(address_list)
 
     # Creates the list of transactions
     transactions_list = []
     for i in range(num_transactions):
-        transaction = Transaction(coin_amounts_list[i], None, addresses_list[i], config.MIXER_POOL_ADDRESS)
+        transaction = Transaction(coin_amounts_list[i], None, addresses_list[i], config.MIXER_POOL_ADDRESS, timeouts[i])
         transactions_list.append(transaction)
 
     # Adds the fee to the transaction
     if fee:
         fee_amt = calculate_fee(amount_coins_added)
         fee_amt = shift_coin_values(fee_amt)
-        fee_transaction = Transaction(str(fee_amt), None, config.MIXER_FEE_ADDRESS, config.MIXER_POOL_ADDRESS)
+        fee_transaction = Transaction(str(fee_amt), None, config.MIXER_FEE_ADDRESS, config.MIXER_POOL_ADDRESS, 0)
         transactions_list.append(fee_transaction)
 
     return transactions_list
@@ -50,7 +53,8 @@ def make_transactions(transactions_list):
         amount = transaction.amount
         to_address = transaction.to_address
         from_address = transaction.from_address
-        api.transfer_coins(from_address, to_address, amount)
+        time_delay = transaction.time_delay
+        api.transfer_coins(from_address, to_address, amount, time_delay)
 
 
 def convert_transactions_list_to_json(transactions_list):
@@ -68,16 +72,29 @@ def convert_transactions_list_to_json(transactions_list):
     }
 
 
-def randomize_addresses(num_addresses, addresses):
-    # Takes a list of addresses and randomiz
+def randomize_addresses(num_transactions, addresses):
+    # Takes a list of addresses and randomizes them
     new_address_list = addresses
 
-    for i in range(len(addresses), num_addresses):
+    for i in range(len(addresses), num_transactions):
         tmp_address = choice(addresses)
         new_address_list.append(tmp_address)
 
     new_address_list = shuffle(new_address_list)
     return new_address_list
+
+
+def randomize_timeouts(num_addresses, timeout):
+    # Takes the max timeout and randomizes them
+    new_timeout_list = []
+    if timeout:
+        timeout = int(timeout)
+        for i in range(num_addresses):
+            new_timeout_list.append(randint(0, timeout))
+    else:
+        new_timeout_list = [0] * num_addresses
+
+    return new_timeout_list
 
 
 def randomize_coins(num_buckets, balance, fee):

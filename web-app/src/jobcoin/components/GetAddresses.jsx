@@ -116,6 +116,10 @@ class GetAddresses extends React.Component {
                     errors = true;
                     errorString += 'The max number of transactions is 20.\n';
                 }
+                if (parseFloat(transactions) % 1 !== 0) {
+                    errors = true;
+                    errorString += 'The value for transactions must be an integer.\n';
+                }
                 if (num_trimmed_addresses > transactions) {
                     errors = true;
                     errorString += 'The number of transactions must be more than the number of addresses.\n';
@@ -124,14 +128,18 @@ class GetAddresses extends React.Component {
         }
 
         if (timeout !== "") {
+            console.log(timeout)
             if (isNaN(timeout)) {
                 errors = true;
                 errorString += 'The timeout field must be a number.\n';
-            }
-            else {
-                if (timeout > 120) {
+            } else {
+                if (timeout > 3) {
                     errors = true;
-                    errorString += 'The max timeout time is 120 seconds.\n';
+                    errorString += 'The max timeout time is 3 seconds.\n';
+                }
+                if (parseFloat(timeout) % 1 !== 0) {
+                    errors = true;
+                    errorString += 'The value for timeout must be an integer.\n';
                 }
             }
         }
@@ -151,6 +159,7 @@ class GetAddresses extends React.Component {
             formValues: subState
         });
     };
+
 
     onFieldChange = (event) => {
         const id = event.target.id;
@@ -198,10 +207,13 @@ class GetAddresses extends React.Component {
                                 <Form.Group>
                                     <Form.Label>Max Timeout</Form.Label>
                                     <Form.Control type="timeout" onChange={(e) => this.onFieldChange(e)}
-                                                  placeholder="Enter the max timeout in seconds (MAX 120)"
+                                                  placeholder="Enter the max timeout in seconds (MAX 3)"
                                                   key='timeout' id='timeout'/>
                                     <Form.Text className="text-muted">
                                         This allows us to spread out transactions randomly over a given period of time.
+                                    </Form.Text>
+                                    <Form.Text className="text-muted">
+                                        This is intentionally short for demonstration purposes.
                                     </Form.Text>
                                 </Form.Group>
                             </Form>

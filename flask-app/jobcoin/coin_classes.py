@@ -1,10 +1,11 @@
 class Transaction:
 
-    def __init__(self, amount, time_stamp, to_address, from_address):
+    def __init__(self, amount, time_stamp, to_address, from_address, time_delay=0):
         self.amount = amount
         self.time_stamp = time_stamp
         self.to_address = to_address
         self.from_address = from_address
+        self.time_delay = time_delay
 
     def print(self):
         # Used for debugging purposes
@@ -15,6 +16,7 @@ class Transaction:
             print('From address: ' + self.from_address)
         else:
             print('Transaction originated from Jobcoin API.')
+        print('Time delay: ' + str(self.time_delay))
 
 
 class Address:
