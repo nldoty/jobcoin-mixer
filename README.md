@@ -1,5 +1,5 @@
 # jobcoin-mixer
-An application for mixing Jobcoin transactions
+An application for mixing Jobcoin transactions. If you are interviewing with Gemini and looking for examples of their take-home project, this is it. 
 
 ## Instructions
 The containers can be run separately or they can be run as a group, using `Docker`/`docker-compose`.    
